@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
-<meta name="hissa-build" content="v5-one-click-ministry-docx">
+<meta name="hissa-build" content="v6-split-prep-and-cards">
 <title>حِصّة — مولّد التحاضير اليومية للتربية البدنية</title>
 <meta name="description" content="منصة تولّد تحضيرًا يوميًا كاملًا للتربية البدنية بالصيغة الرسمية القطرية، فريدًا لكل معلم، مع بطاقات مرافقة مصوّرة.">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9277541871560874"
@@ -318,7 +318,7 @@
         <li><b>٤</b><span>تنزيل بصيغة Word أو طباعة مباشرة، مجانًا بالكامل.</span></li>
       </ul>
     </div>
-    <div class="auth-foot">جميع الصفوف: الأول حتى الثاني عشر · الفصل الدراسي الأول ٢٠٢٦/٢٠٢٧ · <b>الإصدار ٥</b></div>
+    <div class="auth-foot">جميع الصفوف: الأول حتى الثاني عشر · الفصل الدراسي الأول ٢٠٢٦/٢٠٢٧ · <b>الإصدار ٦</b></div>
   </aside>
 
   <main class="auth-pane">
@@ -359,7 +359,7 @@
 <div id="appScreen" hidden>
   <header class="topbar">
     <div class="tb-in">
-      <div class="tb-brand"><span class="mark">ح</span> حِصّة <span class="ver">الإصدار ٥</span></div>
+      <div class="tb-brand"><span class="mark">ح</span> حِصّة <span class="ver">الإصدار ٦</span></div>
       <div class="spacer"></div>
       <div class="who">
         <div class="avatar" id="avatar">ح</div>
@@ -393,11 +393,12 @@
 
       <div class="opts">
         <button class="lnk" id="againBtn" type="button">↻ تشكيلة أخرى لنفس اليوم</button>
-        <button class="btn mustard sm" id="wordBtn" type="button">⬇ إعادة تنزيل الملف</button>
+        <button class="btn mustard sm" id="wordBtn" type="button">⬇ تنزيل التحضير (نموذج الوزارة)</button>
+        <button class="btn sm ghost" id="cardsBtn" type="button">⬇ تنزيل البطاقات (ملف منفصل)</button>
         <span class="spacer"></span>
         <span class="sig" id="sigNote"></span>
       </div>
-      <p class="hintline">نقرة واحدة تُنزِّل <b>نموذج وزارة التربية والتعليم الرسمي نفسه</b> بصيغة <b>.docx</b> — بترويسة الوزارة وجداولها، ممتلئًا ببيانات هذه الحصة، ومعه البطاقات المرافقة في صفحات تالية. افتحه بـ Word للطباعة أو التعديل.</p>
+      <p class="hintline"><b>ملفان منفصلان:</b> ملف التحضير = نموذج وزارة التربية والتعليم الرسمي وحده، بلا أي إضافة. وملف البطاقات = بطاقة في كل صفحة بصورتها وخطواتها، يُنزَّل بنقرة مستقلة. كلاهما <b>.docx</b> يُفتح بـ Word.</p>
     </section>
 
     <div class="grid2">
@@ -517,7 +518,7 @@
     </div>
 
     <div class="legal-bar">
-      <span>المحتوى المولَّد استرشادي وغير معتمد رسميًا — مسؤولية المراجعة والتطبيق تقع على المعلم وحده. <b>· الإصدار ٥</b></span>
+      <span>المحتوى المولَّد استرشادي وغير معتمد رسميًا — مسؤولية المراجعة والتطبيق تقع على المعلم وحده. <b>· الإصدار ٦</b></span>
       <button type="button" class="lk" data-legal>إخلاء المسؤولية وشروط الاستخدام</button>
     </div>
 
@@ -2623,28 +2624,6 @@ function fillLesson(doc, tbl, tpl, L, teacherName, imgs){
   setCell(doc, TC(16)[1], L.hw, tpl);
 }
 
-/* ---------- البطاقات المرافقة (صفحة تالية داخل الملف نفسه) ---------- */
-function buildCards(doc, body, tpl, L, imgs, sect){
-  // القالب ينتهي بفقرة تحمل فاصل صفحة، فالبطاقات تبدأ في صفحة جديدة تلقائيًا
-  const before = sect || null;
-  const put = el => body.insertBefore(el, before);
-
-  put(makePara(doc, tpl[RED] || tpl.plain,
-    `البطاقات المرافقة للحصة — ${L.lessonTitle} (${L.gradeName})`, RED, true));
-
-  L.items.forEach((it, i) => {
-    put(makePara(doc, tpl[RED] || tpl.plain, `${it.slotName} — ${it.t}`, RED, true));
-    if(imgs && imgs[i])
-      put(imgPara(doc, tpl.plain, imgs[i].rid, imgs[i].w, imgs[i].h, 4600000));
-    it.s.forEach(s => put(makePara(doc, tpl.plain, '- ' + s, null, false)));
-    put(makePara(doc, tpl.plain,
-      `التنظيم: ${it.o || '—'} · الأدوات: ${it.e || '—'} · الزمن: ${it.d || '—'}`, BLUE, false));
-    if(it.sf) put(makePara(doc, tpl.plain, `السلامة: ${it.sf}`, RED, false));
-    if(it.ez) put(makePara(doc, tpl.plain, `تبسيط للمتعثرين: ${it.ez}`, null, false));
-    if(it.hd) put(makePara(doc, tpl.plain, `تحدٍّ للمتقنين: ${it.hd}`, null, false));
-    put(makePara(doc, tpl.plain, '', null, false));
-  });
-}
 
 /* ---------- تحويل مخطط SVG إلى صورة ---------- */
 function svgToBytes(svgEl, scale){
@@ -2683,39 +2662,108 @@ function b64ToBytes(b64){
   return arr;
 }
 
-/* ---------- البناء الكامل ---------- */
-async function buildMinistryDocx(L, teacherName, svgs){
-  if(!(typeof DecompressionStream === 'function'))
+/* ---------- فاصل صفحة ---------- */
+function pageBreakPara(doc, tpl){
+  const p = makePara(doc, tpl.plain, '', null, false);
+  const r = kidsOf(p, 'r')[0];
+  const b = mk(doc, 'br'); wAttr(b, 'type', 'page');
+  const rpr = firstKid(r, 'rPr');
+  if(rpr) r.insertBefore(b, rpr.nextSibling); else r.insertBefore(b, r.firstChild);
+  return p;
+}
+
+/* ---------- فتح قالب الوزارة ---------- */
+async function openTemplate(){
+  if(typeof DecompressionStream !== 'function')
     throw new Error('متصفحك قديم ولا يدعم فتح ملفات Word — حدّث المتصفح');
   const zip = await zipRead(b64ToBytes(MINISTRY_TEMPLATE_B64));
-
   const xmlStr  = await zip.text('word/document.xml');
   const relsStr = await zip.text('word/_rels/document.xml.rels');
   const doc = new DOMParser().parseFromString(xmlStr, 'application/xml');
   if(doc.getElementsByTagName('parsererror').length) throw new Error('قالب الوزارة تالف');
-
   const body = doc.getElementsByTagNameNS(WNS, 'body')[0];
   const tbl  = kidsOf(body, 'tbl')[0];
   const tpl  = paraTemplates(tbl);
   const media = Media(zip, relsStr);
+  return { zip, doc, body, tbl, tpl, media };
+}
 
-  // الصور من مخططات الحصة
+async function rasterise(media, svgs, scale){
   const imgs = [];
   for(const sv of (svgs || [])){
-    const r = sv ? await svgToBytes(sv, 1.6) : null;
+    const r = sv ? await svgToBytes(sv, scale || 1.6) : null;
     imgs.push(r ? media.add(r.bytes, r.w, r.h, r.ext) : null);
   }
+  return imgs;
+}
 
-  fillLesson(doc, tbl, tpl, L, teacherName, imgs);
-
-  const sect = kidsOf(body, 'sectPr')[0] || null;
-  buildCards(doc, body, tpl, L, imgs, sect);
-
+function seal(zip, doc, media){
   zip.set('word/document.xml', new XMLSerializer().serializeToString(doc));
   zip.set('word/_rels/document.xml.rels', media.rels);
   for(const f of media.files) zip.set('word/media/' + f.name, f.bytes);
-
   return zip.blob();
+}
+
+/* ============================================================
+   ١) ملف التحضير — نموذج الوزارة وحده، بلا أي إضافة
+   ============================================================ */
+async function buildMinistryDocx(L, teacherName, svgs){
+  const T = await openTemplate();
+  const imgs = await rasterise(T.media, svgs, 1.6);
+  fillLesson(T.doc, T.tbl, T.tpl, L, teacherName, imgs);
+
+  // حذف الفقرة الأخيرة التي تحمل فاصل صفحة حتى لا تبقى صفحة فارغة في النهاية
+  const kids = Array.from(T.body.childNodes).filter(n => n.nodeType === 1);
+  for(let i = kids.length - 1; i >= 0; i--){
+    const k = kids[i];
+    if(k.localName === 'sectPr') continue;
+    if(k.localName === 'p' && k.getElementsByTagNameNS(WNS, 'br').length){
+      T.body.removeChild(k); break;
+    }
+    break;
+  }
+  return seal(T.zip, T.doc, T.media);
+}
+
+/* ============================================================
+   ٢) ملف البطاقات — منفصل تمامًا، بطاقة في كل صفحة
+   ============================================================ */
+async function buildCardsDocx(L, teacherName, svgs){
+  const T = await openTemplate();
+  const imgs = await rasterise(T.media, svgs, 1.9);
+  const { doc, body, tpl } = T;
+
+  const sect = kidsOf(body, 'sectPr')[0] || null;
+  for(const k of Array.from(body.childNodes))
+    if(k.nodeType === 1 && k.localName !== 'sectPr') body.removeChild(k);
+
+  const put = el => body.insertBefore(el, sect);
+
+  put(makePara(doc, tpl[RED] || tpl.plain,
+    `بطاقات التمارين — ${L.gradeName} · ${L.dayName} ${fmtDMY(L.date)}`, RED, true));
+  put(makePara(doc, tpl.plain,
+    `الحصة: ${L.lessonTitle}  —  ${L.unit.no} / ${L.unit.title}`, null, false));
+  if(teacherName) put(makePara(doc, tpl.plain, `المعلم: ${teacherName}`, null, false));
+  put(makePara(doc, tpl.plain, '', null, false));
+
+  L.items.forEach((it, i) => {
+    if(i > 0) put(pageBreakPara(doc, tpl));
+    put(makePara(doc, tpl[RED] || tpl.plain, `بطاقة ${AR(i + 1)} — ${it.slotName}`, RED, true));
+    put(makePara(doc, tpl[RED] || tpl.plain, it.t, RED, true));
+    if(imgs && imgs[i])
+      put(imgPara(doc, tpl.plain, imgs[i].rid, imgs[i].w, imgs[i].h, 5400000));
+    put(makePara(doc, tpl[BLUE] || tpl.plain, 'خطوات التنفيذ:', BLUE, true));
+    it.s.forEach(x => put(makePara(doc, tpl.plain, '• ' + x, null, false)));
+    put(makePara(doc, tpl.plain, '', null, false));
+    put(makePara(doc, tpl.plain, `التنظيم: ${it.o || '—'}`, null, false));
+    put(makePara(doc, tpl.plain, `الأدوات: ${it.e || '—'}`, null, false));
+    put(makePara(doc, tpl.plain, `الزمن: ${it.d || '—'}`, null, false));
+    if(it.sf) put(makePara(doc, tpl[RED] || tpl.plain, `السلامة: ${it.sf}`, RED, false));
+    if(it.ez) put(makePara(doc, tpl.plain, `تبسيط للمتعثرين: ${it.ez}`, null, false));
+    if(it.hd) put(makePara(doc, tpl.plain, `تحدٍّ للمتقنين: ${it.hd}`, null, false));
+  });
+
+  return seal(T.zip, T.doc, T.media);
 }
 /* ============================================================
    محرك التطبيق: الحساب · توليد التحضير · العرض · التصدير
@@ -2944,8 +2992,8 @@ function renderLesson(L){
       </div>
       <h3 class="sum-t">${L.lessonTitle}</h3>
       <p class="sum-u">${L.unit.no} / ${L.unit.title} — ${L.week.stage}</p>
-      <p class="sum-n">تحضيرك بصيغة <b>نموذج وزارة التربية والتعليم الرسمي (.docx)</b> يُنزَّل الآن،
-      وبداخله البطاقات المرافقة. وهذه معاينة تمارين الحصة:</p>
+      <p class="sum-n">تحضيرك بصيغة <b>نموذج وزارة التربية والتعليم الرسمي (.docx)</b> يُنزَّل الآن.
+      البطاقات في <b>ملف منفصل</b> — نزّلها بزر «تنزيل البطاقات». وهذه معاينتها:</p>
     </div>`;
   $('#cards').innerHTML = L.items.map(it=>`
     <article class="card">
@@ -3210,6 +3258,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   $('#genBtn').addEventListener('click', ()=>generate());
   $('#againBtn').addEventListener('click', ()=>{ generate(); toast('تم توليد تشكيلة مختلفة لنفس نقطة المنهج'); });
   $('#wordBtn').addEventListener('click', exportDoc);
+  $('#cardsBtn').addEventListener('click', exportCards);
 
   // نافذة إخلاء المسؤولية — تعمل قبل تسجيل الدخول وبعده
   const legalModal = $('#legalModal');
@@ -3428,30 +3477,40 @@ img { max-width:400pt; }
 }
 ---- end of disabled builder ---- */
 
-async function exportDoc(){
+function lessonSvgs(){ return Array.from(document.querySelectorAll('#cards .card-dg svg')); }
+function teacherName(){
+  return (typeof session === 'function' && session() && session().name) ? session().name : '';
+}
+function saveBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 8000);
+}
+async function withBtn(btn, label, fn, okMsg){
   if(!CURRENT){ toast('ولّد تحضيرًا أولًا'); return; }
-  const btn = $('#wordBtn');
   const prev = btn.textContent;
-  btn.textContent = '... جارٍ تجهيز ملف الوزارة'; btn.disabled = true;
-  try{
-    // يُفتح قالب الوزارة الرسمي (docx) ويُملأ ببيانات هذه الحصة،
-    // فيخرج الملف مطابقًا لنموذج الوزارة لأنه هو نفسه، لا محاكاة له.
-    const svgs = Array.from(document.querySelectorAll('#cards .card-dg svg'));
-    const name = (typeof session === 'function' && session() && session().name) ? session().name : '';
-    const blob = await buildMinistryDocx(CURRENT, name, svgs);
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `خطة التحضير اليومية - ${CURRENT.gradeName} - ${fmtDMY(CURRENT.date)}.docx`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(()=>URL.revokeObjectURL(url), 8000);
-    toast('تم تنزيل نموذج الوزارة الرسمي (.docx)');
-  }catch(e){
-    console.error(e);
-    toast('تعذّر تجهيز الملف — تحقّق من الاتصال بالإنترنت وحاول مجددًا');
-  }finally{
-    btn.textContent = prev; btn.disabled = false;
-  }
+  btn.textContent = label; btn.disabled = true;
+  try{ await fn(); toast(okMsg); }
+  catch(e){ console.error(e); toast('تعذّر تجهيز الملف — حدّث المتصفح وحاول مجددًا'); }
+  finally{ btn.textContent = prev; btn.disabled = false; }
+}
+
+/* ملف ١: التحضير بنموذج الوزارة وحده */
+async function exportDoc(){
+  await withBtn($('#wordBtn'), '... جارٍ تجهيز التحضير', async ()=>{
+    const blob = await buildMinistryDocx(CURRENT, teacherName(), lessonSvgs());
+    saveBlob(blob, `خطة التحضير اليومية - ${CURRENT.gradeName} - ${fmtDMY(CURRENT.date)}.docx`);
+  }, 'تم تنزيل التحضير بنموذج الوزارة');
+}
+
+/* ملف ٢: البطاقات وحدها — تنزيل منفصل بنقرة مستقلة */
+async function exportCards(){
+  await withBtn($('#cardsBtn'), '... جارٍ تجهيز البطاقات', async ()=>{
+    const blob = await buildCardsDocx(CURRENT, teacherName(), lessonSvgs());
+    saveBlob(blob, `بطاقات التمارين - ${CURRENT.gradeName} - ${fmtDMY(CURRENT.date)}.docx`);
+  }, 'تم تنزيل البطاقات في ملف منفصل');
 }
 </script>
 </body>
